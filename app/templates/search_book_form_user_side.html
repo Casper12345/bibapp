@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 
+<header>
+
+    <h1> Welcome {{ user }} </h1>
+
+</header>
+
 <body>
 
     <form action = "http://localhost:5000/book_search_user_side" method = "post">
@@ -33,5 +39,11 @@
     </form>
 
 </body>
+
+<footer>
+
+    <h4> Books Borrowed: {{borrowed_books}}</h4>
+
+</footer>
 
 </html>

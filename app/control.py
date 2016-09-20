@@ -5,7 +5,6 @@ import shelf
 import userdatabase
 
 
-
 class Control(object):
 
     """ Control class """
@@ -27,9 +26,9 @@ class Control(object):
 
     """ Add User Methods """
 
-    def add_user_function(self, surname, first_name, date_of_birth):
+    def add_user_function(self, surname, first_name, date_of_birth, password):
 
-        m = user.User(surname, first_name, date_of_birth, None)
+        m = user.User(surname, first_name, date_of_birth, password, None)
 
         userdatabase.userdatabase.add_user(m)
 
@@ -41,10 +40,9 @@ class Control(object):
 
     """ Search by Title Methods """
 
+
     def search_book_function_a(self, a):
         search = shelf.shelf.books_title()
-
-        print search
 
         if a in search:
 
@@ -105,7 +103,6 @@ class Control(object):
         else:
             return False
 
-
     def search_user_function_b(self, b):
         search = userdatabase.userdatabase.user_first_name()
 
@@ -121,7 +118,46 @@ class Control(object):
         else:
             return False
 
-    """ User Login Method """
+    """ User Login Methods"""
+
+    """ Password Match """
+
+    def password_match(self, sur_name, password):
+
+        sur_name_list = userdatabase.userdatabase.user_surname()
+
+        if sur_name in sur_name_list:
+
+            list_index = sur_name_list.index(sur_name)
+            password_list = userdatabase.userdatabase.user_password()
+            found_object = password_list[list_index]
+
+            if found_object == password:
+                return True
+
+            else:
+                return False
+
+        return False
+
+    """ User Login """
+
+
+    def login(self, sur_name):
+
+        sur_name_list = userdatabase.userdatabase.user_surname()
+
+        list_index = sur_name_list.index(sur_name)
+        users_list = userdatabase.userdatabase.users_list
+        user_object = users_list[list_index]
+
+        # set login name and login id
+        userdatabase.userdatabase.login_id = user_object
+        userdatabase.userdatabase.login_name = (user_object.surname, user_object.first_name)
+        print userdatabase.userdatabase.login_id
+        print userdatabase.userdatabase.login_name
+
+
 
     """ User Borrow Book Method"""
 

@@ -5,10 +5,8 @@ from flask import Flask, redirect, url_for, request, render_template
 
 # Script Import
 import control
-#import book
-#import shelf
-#import user
-#import userdatabase
+import userdatabase
+
 
 app = Flask(__name__)
 
@@ -64,7 +62,11 @@ def search_user():
 
 @app.route('/search_book_user_side')
 def search_book_user_side():
-    return render_template('search_book_form_user_side.html')
+
+    sur_name, first_name = userdatabase.userdatabase.login_name
+
+    return render_template('search_book_form_user_side.html',
+                           user='{} {}'.format(first_name,sur_name))
 
 
 """ Main Menu Functions """
@@ -105,8 +107,13 @@ def login():
 @app.route('/user_validate', methods=['POST'])
 def user_validate():
 
-    if request.form['login'] == 'Per' and request.form['pass'] == '1234':
-        # call control.login_function
+    login_value = request.form['login']
+    password = request.form['pass']
+
+    m = control.control.password_match(login_value, password)
+
+    if m is True:
+        control.control.login(login_value)
         return redirect(url_for('search_book_user_side'))
 
     else:
@@ -164,16 +171,17 @@ def user_form_add():
     surname = request.form['surname']
     first_name = request.form['first_name']
     date_of_birth = request.form['date_of_birth']
+    password = request.form['password']
 
-    m = control.control.add_user_function(surname, first_name, date_of_birth)
+    m = control.control.add_user_function(surname, first_name, date_of_birth, password)
 
-
-    print m.surname, m.first_name, m.date_of_birth
+    print m, m.surname, m.first_name, m.date_of_birth, m.password, m.borrowed_books
 
     return redirect(url_for('user_template', surname=m.surname,
-                           first_name=m.first_name,
-                           date_of_birth=m.date_of_birth,
-                           borrowed_books=m.borrowed_books ))
+                            first_name=m.first_name,
+                            date_of_birth=m.date_of_birth,
+                            password=m.password,
+                            borrowed_books=m.borrowed_books ))
 
 """ Button for Add User Function """
 
@@ -267,6 +275,7 @@ def user_template():
                            surname=request.args.get('surname'),
                            first_name=request.args.get('first_name'),
                            date_of_birth=request.args.get('date_of_birth'),
+                           password=request.args.get('password'),
                            borrowed_books=request.args.get('borrowed_books'))
 
 
@@ -288,6 +297,7 @@ def user_template_search():
                            surname=request.args.get('surname'),
                            first_name=request.args.get('first_name'),
                            date_of_birth=request.args.get('date_of_birth'),
+                           password=request.args.get('password'),
                            borrowed_books=request.args.get('borrowed_books'))
 
 
@@ -304,6 +314,7 @@ def user_template_search_return():
 
 
 """ Book Search function """
+
 
 @app.route('/book_search', methods=['POST'])
 def book_search():
@@ -450,6 +461,7 @@ def user_search():
             return redirect(url_for('user_template_search', surname=found_object_a.surname,
                                     first_name=found_object_a.first_name,
                                     date_of_birth=found_object_a.date_of_birth,
+                                    password=found_object_a.password,
                                     borrowed_books=found_object_a.borrowed_books))
 
     elif request.form['search'] == 'Search by First Name':
@@ -462,6 +474,7 @@ def user_search():
             return redirect(url_for('user_template_search', surname=found_object_b.surname,
                                     first_name=found_object_b.first_name,
                                     date_of_birth=found_object_b.date_of_birth,
+                                    password=found_object_b.password,
                                     borrowed_books=found_object_b.borrowed_books))
 
 """ Button for User Search Function """

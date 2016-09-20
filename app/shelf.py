@@ -20,11 +20,9 @@ class Shelf(object):
         """ This function returns a list of all book titles """
         return [i.title for i in shelf.books_list]
 
-
     def books_surname(self):
         """ This function returns a list of all author surnames """
         return [i.author_sur for i in shelf.books_list]
-
 
     def books_first_name(self):
         """ This function returns a list of all author first names """
