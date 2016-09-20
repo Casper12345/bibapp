@@ -16,7 +16,7 @@ class Control(object):
 
     def add_book_function(self, title, surname, first_name, pub_year):
 
-        m = book.Book(title, surname, first_name, pub_year, None)
+        m = book.Book(title, surname, first_name, pub_year, (None, None))
 
         shelf.shelf.add_book(m)
 
@@ -114,7 +114,6 @@ class Control(object):
             # print user template
             return found_object
 
-
         else:
             return False
 
@@ -157,9 +156,14 @@ class Control(object):
         print userdatabase.userdatabase.login_id
         print userdatabase.userdatabase.login_name
 
-
-
     """ User Borrow Book Method"""
+
+    # book object
+    book_object = None
+
+    def borrow_book(self):
+        book.Book.vacancy_status(control.book_object, userdatabase.userdatabase.login_id)
+        user.User.borrowed_books(userdatabase.userdatabase.login_id, control.book_object)
 
 control = Control()
 

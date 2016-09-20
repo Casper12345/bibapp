@@ -18,10 +18,10 @@ class User(object):
         """ This method shows what books a user has borrowed"""
         self.borrowed_books.append(book)
 
-    def login_user(self):
-        """ This method logs in the user """
-        userdatabase.UserDataBase.login_id = self
-        userdatabase.UserDataBase.login_name = (self.surname, self.first_name)
+    #def login_user(self):
+     #   """ This method logs in the user """
+      #  userdatabase.UserDataBase.login_id = self
+       # userdatabase.UserDataBase.login_name = (self.surname, self.first_name)
 
 
 

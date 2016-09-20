@@ -59,6 +59,8 @@ def search_book():
 def search_user():
     return render_template('search_user_form.html')
 
+""" Main Page User Side"""
+
 
 @app.route('/search_book_user_side')
 def search_book_user_side():
@@ -66,7 +68,8 @@ def search_book_user_side():
     sur_name, first_name = userdatabase.userdatabase.login_name
 
     return render_template('search_book_form_user_side.html',
-                           user='{} {}'.format(first_name,sur_name))
+                           user='{} {}'.format(first_name,sur_name),
+                           borrowed_books= None)
 
 
 """ Main Menu Functions """
@@ -134,6 +137,7 @@ def system_validate():
 
 """ Add Book Function """
 
+
 @app.route('/book_form_add', methods=['POST'])
 def book_form_add():
     title = request.form['title']
@@ -148,9 +152,7 @@ def book_form_add():
     return redirect(url_for('book_template', title=m.title,
                             author_sur=m.author_sur,
                             author_first=author_first,
-                            pub_year=m.pub_year,
-                            av_status=None,
-                            status=m.user_name))
+                            pub_year=m.pub_year))
 
 """ Button for Add Book Function """
 
@@ -202,9 +204,8 @@ def book_template():
                            title=request.args.get('title'),
                            author_sur=request.args.get('author_sur'),
                            author_first=request.args.get('author_first'),
-                           pub_year=request.args.get('pub_year'),
-                           av_status=request.args.get('av_status'),
-                           status=request.args.get('status'))
+                           pub_year=request.args.get('pub_year'))
+
 
 
 """ Button for Book Template """
@@ -226,8 +227,8 @@ def book_template_search():
                            author_sur=request.args.get('author_sur'),
                            author_first=request.args.get('author_first'),
                            pub_year=request.args.get('pub_year'),
-                           av_status=request.args.get('av_status'),
                            status=request.args.get('status'))
+
 
 """ Button for Book Template Search """
 
@@ -249,8 +250,7 @@ def book_template_user_side():
                            author_sur=request.args.get('author_sur'),
                            author_first=request.args.get('author_first'),
                            pub_year=request.args.get('pub_year'),
-                           av_status=request.args.get('av_status'),
-                           status=request.args.get('status'))
+                           av_status=request.args.get('av_status'))
 
 
 """ Button for Book Template User Side """
@@ -263,7 +263,8 @@ def book_template_return_user_side():
         return redirect(url_for('search_book_user_side'))
 
     elif request.form['button'] == 'Borrow Book':
-        pass
+        control.control.borrow_book()
+        return redirect(url_for('search_book_user_side'))
 
 
 """ User Template Function """
@@ -334,8 +335,8 @@ def book_search():
                                     author_sur=found_object_a.author_sur,
                                     author_first=found_object_a.author_first,
                                     pub_year=found_object_a.pub_year,
-                                    av_status=None,
-                                    status=found_object_a.user_name))
+                                    status='{0}, {1}'.format(*found_object_a.user_name)))
+
 
     elif request.form['search'] == 'Search by Surname':
         found_object_b = control.control.search_book_function_b(field)
@@ -350,7 +351,8 @@ def book_search():
                                     author_first=found_object_b.author_first,
                                     pub_year=found_object_b.pub_year,
                                     av_status=None,
-                                    status=found_object_b.user_name))
+                                    status='{}, {}'.format(found_object_b.user_name.surname,
+                                                           found_object_b.user_name.first_name)))
 
     elif request.form['search'] == 'Search by First Name':
         found_object_c = control.control.search_book_function_c(field)
@@ -365,7 +367,8 @@ def book_search():
                                     author_first=found_object_c.author_first,
                                     pub_year=found_object_c.pub_year,
                                     av_status=None,
-                                    status=found_object_c.user_name))
+                                    status='{}, {}'.format(found_object_c.user_name.surname,
+                                                           found_object_c.user_name.first_name)))
 
 """ Button for Book Search Function """
 
@@ -393,7 +396,7 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-
+            control.control.book_object = found_object_a
             return redirect(url_for('book_template_user_side', title=found_object_a.title,
                                     author_sur=found_object_a.author_sur,
                                     author_first=found_object_a.author_first,
@@ -408,7 +411,7 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-
+            control.control.book_object = found_object_b
             return redirect(url_for('book_template_user_side', title=found_object_b.title,
                                     author_sur=found_object_b.author_sur,
                                     author_first=found_object_b.author_first,
@@ -423,7 +426,7 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-
+            control.control.book_object = found_object_c
             return redirect(url_for('book_template_user_side', title=found_object_c.title,
                                     author_sur=found_object_c.author_sur,
                                     author_first=found_object_c.author_first,

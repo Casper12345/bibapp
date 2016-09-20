@@ -12,7 +12,7 @@ class Book(object):
 
     def vacancy_status(self, status):
         """ This method shows the books vacancy status"""
-        self.user_name = status
+        self.user_name = (status.surname, status.first_name)
         return self.user_name
 
 
