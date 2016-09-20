@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+    <form action = "http://localhost:5000/user_search" method = "post">
+
+        <!-- Surname -->
+        <p>Search for User: </p>
+        <p><input type = "text" name = "field" /></p>
+
+         <!-- submit -->
+
+        <p><input type = "submit" name = "search" value = "Search by Surname" /></p>
+
+        <!-- submit -->
+
+        <p><input type = "submit" name = "search" value = "Search by First Name" /></p>
+    </form>
+    <p><br></p>
+    <form action="http://localhost:5000/user_search_return" method = "post">
+
+        <p><input type = "submit" name = "return" value = "return"></p>
+
+    </form>
+
+
+</body>
+
+</html>

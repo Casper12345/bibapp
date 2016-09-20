@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+
+<p>Title: {{title}} </p>
+<p>Author: {{author_sur}}, {{author_first}} </p>
+<p>Publishing Year: {{pub_year}} </p>
+<p>Availability Status: {{av_status}} </p>
+<p>Borrowed by: {{status}}</p>
+
+<form action="http://localhost:5000/book_template_return_user_side"  method = "post">
+
+    <p><input type = "submit" name = "button" value = "Borrow Book"></p>
+    <p><input type = "submit" name = "button" value = "return" /></p>
+
+
+
+</form>
+
+
+</body>
+</html>

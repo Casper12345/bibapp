@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user_form</title>
+</head>
+
+<body>
+
+    <form action = "http://localhost:5000/book_form_add" method = "post">
+
+        <!-- Title of Book -->
+        <p>Title of Book: </p>
+        <p><input type = "text" name = "title" /></p>
+
+        <!-- Surname of Author -->
+        <p>Surname of Author: </p>
+        <p><input type = "text" name = "author_sur" /></p>
+
+        <!-- First Name of Author -->
+        <p>First Name of Author: </p>
+        <p><input type = "text" name = "author_first" /></p>
+
+        <!-- Publication Date -->
+        <p>Year of Publication: </p>
+        <p><input type = "text" name = "pub_year" /></p>
+
+        <!-- submit -->
+
+        <p><input type = "submit" value = "submit" /></p>
+    </form>
+    <p><br></p>
+    <form action="http://localhost:5000/book_form_return" method = "post">
+
+        <p><input type = "submit" name = "return" value = "return"></p>
+
+    </form>
+
+</body>
+
+</html>
+
+
+
+
+
+

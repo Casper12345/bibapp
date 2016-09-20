@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ surname }}, {{ first_name }}</title>
+</head>
+<body>
+
+<p>User Name: {{ surname }}, {{ first_name }} </p>
+<p>Date of Birth: {{ date_of_birth }} </p>
+<p>Books Borrowed: {{ borrowed_books }} </p>
+
+<form action="http://localhost:5000/user_template_return"  method = "post">
+
+    <p><input type = "submit" name = "button" value = "return" /></p>
+
+</form>
+
+
+</body>
+</html>
+
