@@ -138,7 +138,7 @@ def user_validate():
 @app.route('/system_validate', methods=['POST'])
 def system_validate():
 
-    if request.form['login'] == 'Per' and request.form['pass'] == '1234':
+    if request.form['login'] == 'System' and request.form['pass'] == '1234':
         return redirect(url_for('main_system'))
 
     else:
