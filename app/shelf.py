@@ -29,11 +29,6 @@ class Shelf(object):
         return [i.author_first for i in shelf.books_list]
 
 
-    """ Other functions """
-
-    def check_book(self):
-            """ This method shows whether a book is vacant or not"""
-            pass
 
 
 shelf = Shelf()

@@ -40,36 +40,32 @@ def main_system():
 
 """ Render Add Book"""
 
+
 @app.route('/book_form')
 def book_form():
     return render_template('book_form.html')
+
+
+""" Render User Form """
 
 
 @app.route('/user_form')
 def user_form():
     return render_template('user_form.html')
 
+""" Render Search Book Form """
+
 
 @app.route('/search_book')
 def search_book():
     return render_template('search_book_form.html')
 
+""" Render Search User Form """
+
 
 @app.route('/search_user')
 def search_user():
     return render_template('search_user_form.html')
-
-""" Main Page User Side"""
-
-
-@app.route('/search_book_user_side')
-def search_book_user_side():
-
-    sur_name, first_name = userdatabase.userdatabase.login_name
-
-    return render_template('search_book_form_user_side.html',
-                           user='{} {}'.format(first_name,sur_name),
-                           borrowed_books= None)
 
 
 """ Main Menu Functions """
@@ -92,6 +88,21 @@ def menu_main():
 
     elif request.form['submit'] == 'return':
         return redirect(url_for('index'))
+
+
+""" Main Page User Side """
+
+
+@app.route('/search_book_user_side')
+def search_book_user_side():
+
+    sur_name, first_name = userdatabase.userdatabase.login_name
+
+    m = userdatabase.userdatabase.login_id
+
+    return render_template('search_book_form_user_side.html',
+                           user='{} {}'.format(first_name,sur_name),
+                           borrowed_books=', '.join(['%s' % i for i in m.borrowed_books]))
 
 
 """ Login Functions """
@@ -182,8 +193,7 @@ def user_form_add():
     return redirect(url_for('user_template', surname=m.surname,
                             first_name=m.first_name,
                             date_of_birth=m.date_of_birth,
-                            password=m.password,
-                            borrowed_books=m.borrowed_books ))
+                            password=m.password ))
 
 """ Button for Add User Function """
 
@@ -205,7 +215,6 @@ def book_template():
                            author_sur=request.args.get('author_sur'),
                            author_first=request.args.get('author_first'),
                            pub_year=request.args.get('pub_year'))
-
 
 
 """ Button for Book Template """
@@ -238,6 +247,14 @@ def book_template_search_return():
 
     if request.form['button'] == 'return':
         return redirect(url_for('search_book'))
+
+    elif request.form['button'] == 'Mark as Returned':
+        try:
+            control.control.return_book()
+            return redirect(url_for('search_book'))
+
+        except:
+            return redirect(url_for('search_book'))
 
 
 """ Book Template Function User Side """
@@ -276,8 +293,7 @@ def user_template():
                            surname=request.args.get('surname'),
                            first_name=request.args.get('first_name'),
                            date_of_birth=request.args.get('date_of_birth'),
-                           password=request.args.get('password'),
-                           borrowed_books=request.args.get('borrowed_books'))
+                           password=request.args.get('password'))
 
 
 """ Button for User Template """
@@ -303,6 +319,7 @@ def user_template_search():
 
 
 """ Button for User Search Template """
+
 
 @app.route('/user_template_search_return', methods=['POST'])
 def user_template_search_return():
@@ -330,7 +347,7 @@ def book_search():
             return redirect(url_for('search_book'))
 
         else:
-
+            control.control.book_object_return = found_object_a
             return redirect(url_for('book_template_search', title=found_object_a.title,
                                     author_sur=found_object_a.author_sur,
                                     author_first=found_object_a.author_first,
@@ -345,14 +362,12 @@ def book_search():
             return redirect(url_for('search_book'))
 
         else:
-
+            control.control.book_object_return = found_object_b
             return redirect(url_for('book_template_search', title=found_object_b.title,
                                     author_sur=found_object_b.author_sur,
                                     author_first=found_object_b.author_first,
                                     pub_year=found_object_b.pub_year,
-                                    av_status=None,
-                                    status='{}, {}'.format(found_object_b.user_name.surname,
-                                                           found_object_b.user_name.first_name)))
+                                    status='{0}, {1}'.format(*found_object_b.user_name)))
 
     elif request.form['search'] == 'Search by First Name':
         found_object_c = control.control.search_book_function_c(field)
@@ -361,14 +376,13 @@ def book_search():
             return redirect(url_for('search_book'))
 
         else:
-
+            control.control.book_object_return = found_object_c
             return redirect(url_for('book_template_search', title=found_object_c.title,
                                     author_sur=found_object_c.author_sur,
                                     author_first=found_object_c.author_first,
                                     pub_year=found_object_c.pub_year,
                                     av_status=None,
-                                    status='{}, {}'.format(found_object_c.user_name.surname,
-                                                           found_object_c.user_name.first_name)))
+                                    status='{0}, {1}'.format(*found_object_c.user_name)))
 
 """ Button for Book Search Function """
 
@@ -396,12 +410,12 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-            control.control.book_object = found_object_a
+            control.control.book_object_user = found_object_a
             return redirect(url_for('book_template_user_side', title=found_object_a.title,
                                     author_sur=found_object_a.author_sur,
                                     author_first=found_object_a.author_first,
                                     pub_year=found_object_a.pub_year,
-                                    av_status=None,
+                                    av_status="{}".format(found_object_a.av_status),
                                     status=found_object_a.user_name))
 
     elif request.form['search'] == 'Search by Surname':
@@ -411,12 +425,12 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-            control.control.book_object = found_object_b
+            control.control.book_object_user = found_object_b
             return redirect(url_for('book_template_user_side', title=found_object_b.title,
                                     author_sur=found_object_b.author_sur,
                                     author_first=found_object_b.author_first,
                                     pub_year=found_object_b.pub_year,
-                                    av_status=None,
+                                    av_status="{}".format(found_object_b.av_status),
                                     status=found_object_b.user_name))
 
     elif request.form['search'] == 'Search by First Name':
@@ -426,12 +440,12 @@ def book_search_user_side():
             return redirect(url_for('search_book_user_side'))
 
         else:
-            control.control.book_object = found_object_c
+            control.control.book_object_user = found_object_c
             return redirect(url_for('book_template_user_side', title=found_object_c.title,
                                     author_sur=found_object_c.author_sur,
                                     author_first=found_object_c.author_first,
                                     pub_year=found_object_c.pub_year,
-                                    av_status=None,
+                                    av_status="{}".format(found_object_c.av_status),
                                     status=found_object_c.user_name))
 
 """ Buttons for Book Search Function User Side """
@@ -465,7 +479,7 @@ def user_search():
                                     first_name=found_object_a.first_name,
                                     date_of_birth=found_object_a.date_of_birth,
                                     password=found_object_a.password,
-                                    borrowed_books=found_object_a.borrowed_books))
+                                    borrowed_books=', '.join(['%s' % i for i in found_object_a.borrowed_books])))
 
     elif request.form['search'] == 'Search by First Name':
         found_object_b = control.control.search_user_function_b(field)
@@ -478,7 +492,7 @@ def user_search():
                                     first_name=found_object_b.first_name,
                                     date_of_birth=found_object_b.date_of_birth,
                                     password=found_object_b.password,
-                                    borrowed_books=found_object_b.borrowed_books))
+                                    borrowed_books=', '.join(['%s' % i for i in found_object_b.borrowed_books])))
 
 """ Button for User Search Function """
 

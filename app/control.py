@@ -16,7 +16,7 @@ class Control(object):
 
     def add_book_function(self, title, surname, first_name, pub_year):
 
-        m = book.Book(title, surname, first_name, pub_year, (None, None))
+        m = book.Book(title, surname, first_name, pub_year, (None, None), None, 'Available')
 
         shelf.shelf.add_book(m)
 
@@ -28,7 +28,7 @@ class Control(object):
 
     def add_user_function(self, surname, first_name, date_of_birth, password):
 
-        m = user.User(surname, first_name, date_of_birth, password, None)
+        m = user.User(surname, first_name, date_of_birth, password, [])
 
         userdatabase.userdatabase.add_user(m)
 
@@ -159,11 +159,26 @@ class Control(object):
     """ User Borrow Book Method"""
 
     # book object
-    book_object = None
+    book_object_user = None
 
     def borrow_book(self):
-        book.Book.vacancy_status(control.book_object, userdatabase.userdatabase.login_id)
-        user.User.borrowed_books(userdatabase.userdatabase.login_id, control.book_object)
+        if control.book_object_user.av_status == 'Available':
+            book.Book.vacancy_status(control.book_object_user, userdatabase.userdatabase.login_id)
+            user.User.borrowed_books(userdatabase.userdatabase.login_id, control.book_object_user)
+            book.Book.av_status_not_available(control.book_object_user)
+
+        else:
+            return
+
+    """  Return Book Method """
+
+    book_object_return = None
+
+    def return_book(self):
+        m = book.Book.av_status_available(control.book_object_return)
+        user.User.return_books(m)
+        control.book_object_return.user_id = None
+
 
 control = Control()
 

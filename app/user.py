@@ -16,12 +16,12 @@ class User(object):
 
     def borrowed_books(self, book):
         """ This method shows what books a user has borrowed"""
-        self.borrowed_books.append(book)
+        self.borrowed_books.append(book.title)
 
-    #def login_user(self):
-     #   """ This method logs in the user """
-      #  userdatabase.UserDataBase.login_id = self
-       # userdatabase.UserDataBase.login_name = (self.surname, self.first_name)
+    def return_books(self):
+        self.borrowed_books = []
+
+
 
 
 
